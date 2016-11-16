@@ -1,6 +1,6 @@
 {
   "name": "react-native-imagesplit",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "splite image in react native",
   "main": "index.js",
   "directories": {
