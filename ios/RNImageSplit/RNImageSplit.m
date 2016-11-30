@@ -13,8 +13,8 @@
 
 RCT_EXPORT_MODULE()
 
-RCT_EXPORT_METHOD(splitImage:(NSString *)ImagePath callback:(RCTResponseSenderBlock)callback) {
-    //获取屏幕尺寸
+RCT_EXPORT_METHOD(splitImage:(NSString *)ImagePath withCodeImagePath:(NSString *) codeImagePath callback:(RCTResponseSenderBlock)callback) {
+    //    //获取屏幕尺寸
     CGFloat Swidth = [UIScreen mainScreen].bounds.size.width;
     CGFloat Sheight = [UIScreen mainScreen].bounds.size.height;
     UIImage * image = [UIImage imageWithContentsOfFile:ImagePath];
@@ -38,7 +38,7 @@ RCT_EXPORT_METHOD(splitImage:(NSString *)ImagePath callback:(RCTResponseSenderBl
     logoView.image = [UIImage imageNamed:@"img-logo-white"];
     [bottomView addSubview:logoView];
     //二维码
-    UIImage * code = [UIImage imageNamed:@"QR_Code"];
+    UIImage * code = [UIImage imageWithContentsOfFile:codeImagePath];
     CGFloat imageSize = bottomView.frame.size.height -80;
     UIImageView * twoCodeImage = [[UIImageView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(bottomView.frame) - 74 - imageSize, 40, imageSize, imageSize)];
     twoCodeImage.image = code;
