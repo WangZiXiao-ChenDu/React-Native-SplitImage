@@ -38,7 +38,8 @@ RCT_EXPORT_METHOD(splitImage:(NSString *)ImagePath withCodeImagePath:(NSString *
     logoView.image = [UIImage imageNamed:@"img-logo-white"];
     [bottomView addSubview:logoView];
     //二维码
-    UIImage * code = [UIImage imageWithContentsOfFile:codeImagePath];
+    NSURL *imageUrl = [NSURL URLWithString:codeImagePath];
+    UIImage * code = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageUrl]];
     CGFloat imageSize = bottomView.frame.size.height -80;
     UIImageView * twoCodeImage = [[UIImageView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(bottomView.frame) - 74 - imageSize, 40, imageSize, imageSize)];
     twoCodeImage.image = code;
@@ -74,7 +75,7 @@ RCT_EXPORT_METHOD(splitImage:(NSString *)ImagePath withCodeImagePath:(NSString *
     NSString *imagePath = [path_sandox stringByAppendingString:@"/Documents/share.png"];
     //把图片直接保存到指定的路径
     [UIImagePNGRepresentation(imagez) writeToFile:imagePath atomically:YES];
-    
+    NSLog(imagePath);
     callback(@[imagePath ? imagePath : [NSNull null]]);
 }
 @end
