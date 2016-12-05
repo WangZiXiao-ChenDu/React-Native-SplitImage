@@ -9,6 +9,10 @@
 #import "RNImageSplit.h"
 #import <CoreGraphics/CoreGraphics.h>
 
+@interface RNImageSplit ()
+@property(nonatomic, strong) UIImage * code;
+@end
+
 @implementation RNImageSplit
 
 RCT_EXPORT_MODULE()
@@ -38,11 +42,20 @@ RCT_EXPORT_METHOD(splitImage:(NSString *)ImagePath withCodeImagePath:(NSString *
     logoView.image = [UIImage imageNamed:@"img-logo-white"];
     [bottomView addSubview:logoView];
     //二维码
-    NSURL *imageUrl = [NSURL URLWithString:codeImagePath];
-    UIImage * code = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageUrl]];
+    if(![codeImagePath  isEqual: @""]) {
+        NSURL *imageUrl = [NSURL URLWithString:codeImagePath];
+        NSData *data = [NSData dataWithContentsOfURL:imageUrl];
+        if(data != nil) {
+            self.code = [UIImage imageWithData:data];
+        } else {
+            self.code = [UIImage imageNamed:@"QR_Code"];
+        }
+    } else {
+        self.code = [UIImage imageNamed:@"QR_Code"];
+    }
     CGFloat imageSize = bottomView.frame.size.height -80;
     UIImageView * twoCodeImage = [[UIImageView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(bottomView.frame) - 74 - imageSize, 40, imageSize, imageSize)];
-    twoCodeImage.image = code;
+    twoCodeImage.image = self.code;
     [bottomView addSubview:twoCodeImage];
     
     //底部绘制完毕，将UIView转换成UIImage
