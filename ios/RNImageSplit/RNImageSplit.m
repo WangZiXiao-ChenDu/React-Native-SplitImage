@@ -85,10 +85,19 @@ RCT_EXPORT_METHOD(splitImage:(NSString *)ImagePath withCodeImagePath:(NSString *
     //把图片存沙盒
     NSString *path_sandox = NSHomeDirectory();
     //设置一个图片的存储路径
-    NSString *imagePath = [path_sandox stringByAppendingString:@"/Documents/share.png"];
+    NSString *imagePath = [path_sandox stringByAppendingString:@"/Documents/share.jpg"];
     //把图片直接保存到指定的路径
-    [UIImagePNGRepresentation(imagez) writeToFile:imagePath atomically:YES];
-    NSLog(imagePath);
-    callback(@[imagePath ? imagePath : [NSNull null]]);
+    NSError *error;
+    
+    NSData *data = UIImageJPEGRepresentation(imagez, 0.5);
+    
+    BOOL writeSucceeded = [data writeToFile:imagePath options:0 error:&error];
+    if (!writeSucceeded) {
+        NSLog( @"图片保存沙盒失败" );
+        imagez = nil;
+    } else {
+        NSLog( @"保存到document %@", imagePath );
+        callback(@[imagePath ? imagePath : [NSNull null]]);
+    }
 }
 @end
