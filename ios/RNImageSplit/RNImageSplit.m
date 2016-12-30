@@ -106,19 +106,23 @@ RCT_EXPORT_METHOD(splitallTags:(NSString *)ImagePath withCodeImagePath:(NSString
     CGFloat Swidth = [UIScreen mainScreen].bounds.size.width;
     CGFloat Sheight = [UIScreen mainScreen].bounds.size.height;
     UIImage * topImage = [UIImage imageWithContentsOfFile:ImagePath];
-    NSLog(@"--------->%lf",topImage.size.height);
+    NSLog(@"-----> %ld, %ld", topImage.size.width, topImage.size.height);
     int pt;
+    int Y;
     if (Sheight == 667) {
         pt = 2;
+        Y = 478;
     } else if (Sheight == 736) {
-        pt = 3;
+        pt = 2;
+        Y = 478;
     } else {
         pt = 1;
+        Y = 600;
     }
     //绘制顶部view
     UIImageView * topImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, Swidth, Sheight)];
     topImageView.image = topImage;
-    UIView * splaceView = [[UIView alloc]initWithFrame:CGRectMake(0, 239*pt, topImage.size.width, 40*pt)];
+    UIView * splaceView = [[UIView alloc]initWithFrame:CGRectMake(0, Y, topImage.size.width, 40*pt)];
     splaceView.backgroundColor = [UIColor colorWithRed:83/255.0f green:195/255.0f blue:237/255.0f alpha:1];
     [topImageView addSubview:splaceView];
     UIGraphicsBeginImageContextWithOptions(topImageView.bounds.size, NO, [UIScreen mainScreen].scale);
