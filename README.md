@@ -13,13 +13,13 @@ import { NativeModules } from 'react-native';
 ```
 
 ```jsx
-const imageArray = ['','',''];
+const imagePathArray = ['','',''];
 //纵向拼接图片
-NativeModules.RNImageSplit.spliceImageVertical(imageArray, (imagePath) => {
+NativeModules.RNImageSplit.spliceImageVertical(imagePathArray, (imagePath) => {
   // service code
 });
 //横向拼接图片
-NativeModules.RNImageSplit.spliceImageHorizontal(imageArray, (imagePath) => {
+NativeModules.RNImageSplit.spliceImageHorizontal(imagePathArray, (imagePath) => {
   // service code
 });
 ```
