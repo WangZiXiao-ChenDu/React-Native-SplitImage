@@ -17,6 +17,88 @@
 
 RCT_EXPORT_MODULE()
 
+RCT_EXPORT_METHOD(spliceImageVertical:(NSArray *)imageArr callback:(RCTResponseSenderBlock)callback) {
+    float width = 0;
+    float height = 0;
+    for (NSString* path in imageArr) {
+        UIImage * image = [UIImage imageWithContentsOfFile:path];
+        width = image.size.width;
+        height += image.size.height;
+    }
+    CGSize offScreenSize = CGSizeMake(width, height);
+    UIGraphicsBeginImageContextWithOptions(offScreenSize, NO, [UIScreen mainScreen].scale);
+    
+    for (int i = 0; i < imageArr.count; i++) {
+        UIImage * image = [UIImage imageWithContentsOfFile:imageArr[i]];
+        CGRect rect = CGRectMake(0, image.size.height * i, image.size.width, image.size.height);
+        [image drawInRect:rect];
+    }
+    
+    UIImage* finishImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    //把图片存沙盒
+    NSString *path_sandox = NSHomeDirectory();
+    //设置一个图片的存储路径
+    NSString *imagePath = [path_sandox stringByAppendingString:@"/Documents/VerticalSpliceImage.jpg"];
+    NSLog(@"%@",imagePath);
+    //把图片直接保存到指定的路径
+    NSError *error;
+    
+    NSData *data = UIImageJPEGRepresentation(finishImage, 0.5);
+    
+    BOOL writeSucceeded = [data writeToFile:imagePath options:0 error:&error];
+    if (!writeSucceeded) {
+        NSLog( @"拼接图片保存沙盒失败" );
+        finishImage = nil;
+    } else {
+        NSLog( @"拼接图片到document %@", imagePath );
+        callback(@[imagePath ? imagePath : [NSNull null]]);
+    }
+}
+
+RCT_EXPORT_METHOD(spliceImageHorizontal:(NSArray *)imageArr callback:(RCTResponseSenderBlock)callback) {
+    float width = 0;
+    float height = 0;
+    for (NSString* path in imageArr) {
+        UIImage * image = [UIImage imageWithContentsOfFile:path];
+        width += image.size.width;
+        height = image.size.height;
+    }
+    CGSize offScreenSize = CGSizeMake(width, height);
+    UIGraphicsBeginImageContextWithOptions(offScreenSize, NO, [UIScreen mainScreen].scale);
+    
+    for (int i = 0; i < imageArr.count; i++) {
+        UIImage * image = [UIImage imageWithContentsOfFile:imageArr[i]];
+        CGRect rect = CGRectMake(image.size.width * i, 0, image.size.width, image.size.height);
+        [image drawInRect:rect];
+    }
+    
+    UIImage* finishImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    //把图片存沙盒
+    NSString *path_sandox = NSHomeDirectory();
+    //设置一个图片的存储路径
+    NSString *imagePath = [path_sandox stringByAppendingString:@"/Documents/HorizontalSpliceImage.jpg"];
+    NSLog(@"%@",imagePath);
+    //把图片直接保存到指定的路径
+    NSError *error;
+    
+    NSData *data = UIImageJPEGRepresentation(finishImage, 0.5);
+    
+    BOOL writeSucceeded = [data writeToFile:imagePath options:0 error:&error];
+    if (!writeSucceeded) {
+        NSLog( @"拼接图片保存沙盒失败" );
+        finishImage = nil;
+    } else {
+        NSLog( @"拼接图片到document %@", imagePath );
+        callback(@[imagePath ? imagePath : [NSNull null]]);
+    }
+}
+
 RCT_EXPORT_METHOD(splitImage:(NSString *)ImagePath withCodeImagePath:(NSString *) codeImagePath callback:(RCTResponseSenderBlock)callback) {
     //    //获取屏幕尺寸
     CGFloat Swidth = [UIScreen mainScreen].bounds.size.width;
@@ -78,7 +160,7 @@ RCT_EXPORT_METHOD(splitImage:(NSString *)ImagePath withCodeImagePath:(NSString *
     CGRect rectB = CGRectMake(0, rectT.origin.y + image.size.height, bottomImage.size.width, bottomImage.size.height);
     [bottomImage drawInRect:rectB];
     
-    UIImage* imagez = UIGraphicsGetImageFromCurrentImageContext();
+    UIImage* finishImage = UIGraphicsGetImageFromCurrentImageContext();
     
     UIGraphicsEndImageContext();
     
@@ -89,12 +171,12 @@ RCT_EXPORT_METHOD(splitImage:(NSString *)ImagePath withCodeImagePath:(NSString *
     //把图片直接保存到指定的路径
     NSError *error;
     
-    NSData *data = UIImageJPEGRepresentation(imagez, 0.5);
+    NSData *data = UIImageJPEGRepresentation(finishImage, 0.5);
     
     BOOL writeSucceeded = [data writeToFile:imagePath options:0 error:&error];
     if (!writeSucceeded) {
         NSLog( @"图片保存沙盒失败" );
-        imagez = nil;
+        finishImage = nil;
     } else {
         NSLog( @"保存到document %@", imagePath );
         callback(@[imagePath ? imagePath : [NSNull null]]);
@@ -185,7 +267,7 @@ RCT_EXPORT_METHOD(splitallTags:(NSString *)ImagePath withCodeImagePath:(NSString
     CGRect rectB = CGRectMake(0, rectT.origin.y + image.size.height, bottomImage.size.width, bottomImage.size.height);
     [bottomImage drawInRect:rectB];
     
-    UIImage* imagez = UIGraphicsGetImageFromCurrentImageContext();
+    UIImage* finishImage = UIGraphicsGetImageFromCurrentImageContext();
     
     UIGraphicsEndImageContext();
     
@@ -196,12 +278,12 @@ RCT_EXPORT_METHOD(splitallTags:(NSString *)ImagePath withCodeImagePath:(NSString
     //把图片直接保存到指定的路径
     NSError *error;
     
-    NSData *data = UIImageJPEGRepresentation(imagez, 0.5);
+    NSData *data = UIImageJPEGRepresentation(finishImage, 0.5);
     
     BOOL writeSucceeded = [data writeToFile:imagePath options:0 error:&error];
     if (!writeSucceeded) {
         NSLog( @"图片保存沙盒失败" );
-        imagez = nil;
+        finishImage = nil;
     } else {
         NSLog( @"保存到document %@", imagePath );
         callback(@[imagePath ? imagePath : [NSNull null]]);
