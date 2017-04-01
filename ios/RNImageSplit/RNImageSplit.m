@@ -101,26 +101,42 @@ RCT_EXPORT_METHOD(spliceImageHorizontal:(NSArray *)imageArr callback:(RCTRespons
 
 RCT_EXPORT_METHOD(splitImage:(NSString *)ImagePath withCodeImagePath:(NSString *) codeImagePath callback:(RCTResponseSenderBlock)callback) {
     //    //获取屏幕尺寸
+    int pt = 0;
     CGFloat Swidth = [UIScreen mainScreen].bounds.size.width;
     CGFloat Sheight = [UIScreen mainScreen].bounds.size.height;
     UIImage * image = [UIImage imageWithContentsOfFile:ImagePath];
+    switch ((int)Swidth) {
+        case 320:
+            pt = 2;
+            break;
+        case 375:
+            pt = 2;
+            break;
+        case 414:
+            pt = 3;
+            break;
+        default:
+            pt = 1;
+            break;
+    }
     //绘制底部View背景
-    UIView * bottomView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, image.size.width, Sheight * 0.299)];
+    UIView * bottomView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, image.size.width, Sheight * 0.299 * pt)];
     bottomView.backgroundColor = [UIColor colorWithRed:57/255.0f green:74/255.0f blue:95/255.0f alpha:1];
+    
     //绘制底部View内部控件
-    UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(38, bottomView.frame.size.height *0.15, Swidth * 0.80, 40)];
+    UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(38 * pt, bottomView.frame.size.height *0.15, Swidth * 0.80 * pt, 40 * pt)];
     label.text = @"长按二维码，";
     label.textColor = [UIColor whiteColor];
-    label.font = [UIFont fontWithName:@"PingFangSC-Medium" size:28];
+    label.font = [UIFont fontWithName:@"PingFangSC-Medium" size:28 * pt];
     [bottomView addSubview:label];
     
     UILabel * geneLabel = [[UILabel alloc]initWithFrame:CGRectMake(label.frame.origin.x, CGRectGetMaxY(label.frame), label.frame.size.width, label.frame.size.height)];
     geneLabel.text = @"生成你的基因名片→";
     geneLabel.textColor = [UIColor whiteColor];
-    geneLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:28];
+    geneLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:28 * pt];
     [bottomView addSubview:geneLabel];
     //logo
-    UIImageView * logoView = [[UIImageView alloc]initWithFrame:CGRectMake(label.frame.origin.x, CGRectGetMaxY(geneLabel.frame) + 12, Swidth *0.485, Sheight* 0.072)];
+    UIImageView * logoView = [[UIImageView alloc]initWithFrame:CGRectMake(label.frame.origin.x, CGRectGetMaxY(geneLabel.frame) + 12, Swidth *0.485 * pt, Sheight* 0.072 * pt)];
     logoView.image = [UIImage imageNamed:@"img-logo-white"];
     [bottomView addSubview:logoView];
     //二维码
@@ -135,8 +151,8 @@ RCT_EXPORT_METHOD(splitImage:(NSString *)ImagePath withCodeImagePath:(NSString *
     } else {
         self.code = [UIImage imageNamed:@"QR_Code"];
     }
-    CGFloat imageSize = bottomView.frame.size.height -80;
-    UIImageView * twoCodeImage = [[UIImageView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(bottomView.frame) - 74 - imageSize, 40, imageSize, imageSize)];
+    CGFloat imageSize = bottomView.frame.size.height -80 * pt;
+    UIImageView * twoCodeImage = [[UIImageView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(bottomView.frame) - 74 * pt - imageSize, 40 * pt, imageSize, imageSize)];
     twoCodeImage.image = self.code;
     [bottomView addSubview:twoCodeImage];
     
