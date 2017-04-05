@@ -131,7 +131,7 @@ RCT_EXPORT_METHOD(splitImage:(NSString *)ImagePath withCodeImagePath:(NSString *
     [bottomView addSubview:label];
     
     UILabel * geneLabel = [[UILabel alloc]initWithFrame:CGRectMake(label.frame.origin.x, CGRectGetMaxY(label.frame), label.frame.size.width, label.frame.size.height)];
-    geneLabel.text = @"生成你的基因名片→";
+    geneLabel.text = @"开启自己的基因探索之旅";
     geneLabel.textColor = [UIColor whiteColor];
     geneLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:28 * pt];
     [bottomView addSubview:geneLabel];
@@ -239,7 +239,7 @@ RCT_EXPORT_METHOD(splitallTags:(NSString *)ImagePath withCodeImagePath:(NSString
     [bottomView addSubview:label];
     
     UILabel * geneLabel = [[UILabel alloc]initWithFrame:CGRectMake(label.frame.origin.x, CGRectGetMaxY(label.frame), label.frame.size.width, label.frame.size.height)];
-    geneLabel.text = @"生成你的基因名片→";
+    geneLabel.text = @"开启自己的基因探索之旅";
     geneLabel.textColor = [UIColor whiteColor];
     geneLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:14];
     [bottomView addSubview:geneLabel];
