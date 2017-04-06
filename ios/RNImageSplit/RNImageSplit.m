@@ -17,19 +17,30 @@
 
 RCT_EXPORT_MODULE()
 
+- (UIImage*)imageCompressWithSimple:(UIImage*)image scaledToSize:(CGSize)size
+{
+    UIGraphicsBeginImageContextWithOptions(size, YES, 1.0);
+    [image drawInRect:CGRectMake(0,0,size.width,size.height)];
+    UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
 RCT_EXPORT_METHOD(spliceImageVertical:(NSArray *)imageArr callback:(RCTResponseSenderBlock)callback) {
     float width = 0;
     float height = 0;
-    for (NSString* path in imageArr) {
-        UIImage * image = [UIImage imageWithContentsOfFile:path];
+    for (int i = 0; i< imageArr.count; i++) {
+        UIImage * image = [UIImage imageWithContentsOfFile:imageArr[i]];
+        //        UIImage * newImage = [self imageCompressWithSimple:image scaledToSize:CGSizeMake(375, 667)];
         width = image.size.width;
         height += image.size.height;
     }
     CGSize offScreenSize = CGSizeMake(width, height);
-    UIGraphicsBeginImageContextWithOptions(offScreenSize, NO, [UIScreen mainScreen].scale);
+    UIGraphicsBeginImageContextWithOptions(offScreenSize, YES, 1.0);
     
     for (int i = 0; i < imageArr.count; i++) {
         UIImage * image = [UIImage imageWithContentsOfFile:imageArr[i]];
+        //        UIImage * newImage = [self imageCompressWithSimple:image scaledToSize:CGSizeMake(375, 667)];
         CGRect rect = CGRectMake(0, image.size.height * i, image.size.width, image.size.height);
         [image drawInRect:rect];
     }
@@ -42,7 +53,6 @@ RCT_EXPORT_METHOD(spliceImageVertical:(NSArray *)imageArr callback:(RCTResponseS
     NSString *path_sandox = NSHomeDirectory();
     //设置一个图片的存储路径
     NSString *imagePath = [path_sandox stringByAppendingString:@"/Documents/VerticalSpliceImage.jpg"];
-    NSLog(@"%@",imagePath);
     //把图片直接保存到指定的路径
     NSError *error;
     
@@ -83,7 +93,6 @@ RCT_EXPORT_METHOD(spliceImageHorizontal:(NSArray *)imageArr callback:(RCTRespons
     NSString *path_sandox = NSHomeDirectory();
     //设置一个图片的存储路径
     NSString *imagePath = [path_sandox stringByAppendingString:@"/Documents/HorizontalSpliceImage.jpg"];
-    NSLog(@"%@",imagePath);
     //把图片直接保存到指定的路径
     NSError *error;
     
@@ -107,7 +116,7 @@ RCT_EXPORT_METHOD(splitImage:(NSString *)ImagePath withCodeImagePath:(NSString *
     UIImage * image = [UIImage imageWithContentsOfFile:ImagePath];
     switch ((int)Swidth) {
         case 320:
-            pt = 2;
+            pt = 1;
             break;
         case 375:
             pt = 2;
@@ -120,23 +129,23 @@ RCT_EXPORT_METHOD(splitImage:(NSString *)ImagePath withCodeImagePath:(NSString *
             break;
     }
     //绘制底部View背景
-    UIView * bottomView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, image.size.width, Sheight * 0.299 * pt)];
+    UIView * bottomView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, image.size.width, 100 * pt)];
     bottomView.backgroundColor = [UIColor colorWithRed:57/255.0f green:74/255.0f blue:95/255.0f alpha:1];
     
     //绘制底部View内部控件
-    UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(38 * pt, bottomView.frame.size.height *0.15, Swidth * 0.80 * pt, 40 * pt)];
+    UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(38 * pt, 15 * pt, 200 * pt, 20 * pt)];
     label.text = @"长按二维码，";
     label.textColor = [UIColor whiteColor];
-    label.font = [UIFont fontWithName:@"PingFangSC-Medium" size:28 * pt];
+    label.font = [UIFont fontWithName:@"PingFangSC-Medium" size:14 * pt];
     [bottomView addSubview:label];
     
     UILabel * geneLabel = [[UILabel alloc]initWithFrame:CGRectMake(label.frame.origin.x, CGRectGetMaxY(label.frame), label.frame.size.width, label.frame.size.height)];
     geneLabel.text = @"开启自己的基因探索之旅";
     geneLabel.textColor = [UIColor whiteColor];
-    geneLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:28 * pt];
+    geneLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:14 * pt];
     [bottomView addSubview:geneLabel];
     //logo
-    UIImageView * logoView = [[UIImageView alloc]initWithFrame:CGRectMake(label.frame.origin.x, CGRectGetMaxY(geneLabel.frame) + 12, Swidth *0.485 * pt, Sheight* 0.072 * pt)];
+    UIImageView * logoView = [[UIImageView alloc]initWithFrame:CGRectMake(label.frame.origin.x, CGRectGetMaxY(geneLabel.frame) + 6, 91 * pt, 24 * pt)];
     logoView.image = [UIImage imageNamed:@"img-logo-white"];
     [bottomView addSubview:logoView];
     //二维码
@@ -151,13 +160,13 @@ RCT_EXPORT_METHOD(splitImage:(NSString *)ImagePath withCodeImagePath:(NSString *
     } else {
         self.code = [UIImage imageNamed:@"QR_Code"];
     }
-    CGFloat imageSize = bottomView.frame.size.height -80 * pt;
-    UIImageView * twoCodeImage = [[UIImageView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(bottomView.frame) - 74 * pt - imageSize, 40 * pt, imageSize, imageSize)];
+    CGFloat imageSize = 60 * pt;
+    UIImageView * twoCodeImage = [[UIImageView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(bottomView.frame) - 37 * pt - imageSize, 20 * pt, imageSize, imageSize)];
     twoCodeImage.image = self.code;
     [bottomView addSubview:twoCodeImage];
     
     //底部绘制完毕，将UIView转换成UIImage
-    UIGraphicsBeginImageContextWithOptions(bottomView.bounds.size, NO, [UIScreen mainScreen].scale);
+    UIGraphicsBeginImageContextWithOptions(bottomView.bounds.size, YES, 1.0);
     [bottomView.layer renderInContext:UIGraphicsGetCurrentContext()];
     UIImage * bottomImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
@@ -168,7 +177,7 @@ RCT_EXPORT_METHOD(splitImage:(NSString *)ImagePath withCodeImagePath:(NSString *
     CGSize offScreenSize = CGSizeMake(width, height);
     
     // UIGraphicsBeginImageContext(offScreenSize);用这个重绘图片会模糊
-    UIGraphicsBeginImageContextWithOptions(offScreenSize, NO, [UIScreen mainScreen].scale);
+    UIGraphicsBeginImageContextWithOptions(offScreenSize, YES, 1.0);
     //顶部图片
     CGRect rectT = CGRectMake(0, 0, image.size.width, image.size.height);
     [image drawInRect:rectT];
