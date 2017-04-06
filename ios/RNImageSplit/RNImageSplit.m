@@ -29,9 +29,9 @@ RCT_EXPORT_MODULE()
 RCT_EXPORT_METHOD(spliceImageVertical:(NSArray *)imageArr callback:(RCTResponseSenderBlock)callback) {
     float width = 0;
     float height = 0;
+    float y = 0;
     for (int i = 0; i< imageArr.count; i++) {
         UIImage * image = [UIImage imageWithContentsOfFile:imageArr[i]];
-        //        UIImage * newImage = [self imageCompressWithSimple:image scaledToSize:CGSizeMake(375, 667)];
         width = image.size.width;
         height += image.size.height;
     }
@@ -40,9 +40,9 @@ RCT_EXPORT_METHOD(spliceImageVertical:(NSArray *)imageArr callback:(RCTResponseS
     
     for (int i = 0; i < imageArr.count; i++) {
         UIImage * image = [UIImage imageWithContentsOfFile:imageArr[i]];
-        //        UIImage * newImage = [self imageCompressWithSimple:image scaledToSize:CGSizeMake(375, 667)];
-        CGRect rect = CGRectMake(0, image.size.height * i, image.size.width, image.size.height);
+        CGRect rect = CGRectMake(0, y, image.size.width, image.size.height);
         [image drawInRect:rect];
+        y += image.size.height;
     }
     
     UIImage* finishImage = UIGraphicsGetImageFromCurrentImageContext();
