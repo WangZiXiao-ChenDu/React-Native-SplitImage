@@ -136,14 +136,14 @@ RCT_EXPORT_METHOD(splitImage:(NSString *)ImagePath withCodeImagePath:(NSString *
     bottomView.layer.borderWidth = 0.5;
     //logo
     UIImage * logoImage = [UIImage imageNamed:@"23MofangLogo28"];
-    UIImageView * logoView = [[UIImageView alloc]initWithFrame:CGRectMake(38 * pt, 20 * pt, logoImage.size.width, logoImage.size.height)];
+    UIImageView * logoView = [[UIImageView alloc]initWithFrame:CGRectMake(38 * pt, 20 * pt, 119 * pt, 28 * pt)];
     logoView.image = logoImage;
     [bottomView addSubview:logoView];
     //绘制底部View内部控件
     UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(logoView.frame.origin.x, CGRectGetMaxY(logoView.frame) + 6, 200 * pt, 20 * pt)];
     label.text = @"长按二维码，开启基因探索之旅";
     label.textColor = [UIColor colorWithRed: 66/255.0 green: 66/255.0 blue: 68/255.0 alpha:1];
-    label.font = [UIFont fontWithName:@"PingFangSC-Regular" size:13];
+    label.font = [UIFont fontWithName:@"PingFangSC-Regular" size:13 * pt];
     [bottomView addSubview:label];
     //二维码
     if(![codeImagePath  isEqual: @""]) {
@@ -206,4 +206,3 @@ RCT_EXPORT_METHOD(splitImage:(NSString *)ImagePath withCodeImagePath:(NSString *
 }
 
 @end
-
