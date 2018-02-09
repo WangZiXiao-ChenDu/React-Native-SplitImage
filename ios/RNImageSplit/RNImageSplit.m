@@ -111,32 +111,23 @@ RCT_EXPORT_METHOD(spliceImageHorizontal:(NSArray *)imageArr callback:(RCTRespons
 RCT_EXPORT_METHOD(splitImage:(NSString *)ImagePath withCodeImagePath:(NSString *) codeImagePath callback:(RCTResponseSenderBlock)callback) {
     //    //获取屏幕尺寸
     int pt = 0;
-    CGFloat Swidth = [UIScreen mainScreen].bounds.size.width;
+    //    CGFloat Swidth = [UIScreen mainScreen].bounds.size.width;
     CGFloat Sheight = [UIScreen mainScreen].bounds.size.height;
     UIImage * image = [UIImage imageWithContentsOfFile:ImagePath];
-    switch ((int)Swidth) {
-        case 320:
-            pt = 1;
-            break;
-        case 375:
-            pt = 2;
-            break;
-        case 414:
-            pt = 3;
-            break;
-        default:
-            pt = 1;
-            break;
+    if ((int)Sheight <= 667) {
+        pt = 2;
+    } else {
+        pt = 3;
     }
     
     //绘制底部View背景
-    UIView * bottomView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, image.size.width, 100*pt)];
+    UIView * bottomView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, image.size.width, 120 * pt)];
     bottomView.backgroundColor = [UIColor whiteColor];
     bottomView.layer.borderColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1].CGColor;
     bottomView.layer.borderWidth = 0.5;
     //logo
     UIImage * logoImage = [UIImage imageNamed:@"23MofangLogo28"];
-    UIImageView * logoView = [[UIImageView alloc]initWithFrame:CGRectMake(38 * pt, 20 * pt, 119 * pt, 28 * pt)];
+    UIImageView * logoView = [[UIImageView alloc]initWithFrame:CGRectMake(20 * pt, 44 * pt, 119 * pt, 28 * pt)];
     logoView.image = logoImage;
     [bottomView addSubview:logoView];
     //绘制底部View内部控件
@@ -158,7 +149,7 @@ RCT_EXPORT_METHOD(splitImage:(NSString *)ImagePath withCodeImagePath:(NSString *
         self.code = [UIImage imageNamed:@"QR_Code"];
     }
     CGFloat imageSize = 60 * pt;
-    UIImageView * twoCodeImage = [[UIImageView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(bottomView.frame) - 37 * pt - imageSize, 20 * pt, imageSize, imageSize)];
+    UIImageView * twoCodeImage = [[UIImageView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(bottomView.frame) - 20 * pt - imageSize, 40 * pt, imageSize, imageSize)];
     twoCodeImage.image = self.code;
     [bottomView addSubview:twoCodeImage];
     
@@ -206,3 +197,4 @@ RCT_EXPORT_METHOD(splitImage:(NSString *)ImagePath withCodeImagePath:(NSString *
 }
 
 @end
+
